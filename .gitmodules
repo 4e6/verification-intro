@@ -1,0 +1,3 @@
+[submodule "coq-lecture-notes"]
+	path = coq-lecture-notes
+	url = https://github.com/anton-trunov/coq-lecture-notes.git
