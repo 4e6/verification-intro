@@ -117,12 +117,8 @@ Definition applyn (f : nat -> nat) :=
 About applyn.
 About iter.
 
-Definition incn (n : nat) : nat := n + 1.
-
-Compute incn 3.
-
 Definition add_rec (n m : nat) : nat :=
-  iter n incn m.
+  iter n (fun a => a + 1) m.
 
 Variable n : nat.
 Compute add_rec 1 0.
@@ -141,3 +137,4 @@ Compute mul_rec 2 3.
 Compute mul_rec 2 6.
 Compute mul_rec 3 8.
 Compute mul_rec 8 3.
+Compute mul_rec 8 n.
