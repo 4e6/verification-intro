@@ -21,41 +21,73 @@ Variables A B C D : Prop.
 
 Lemma axiomK :
   A -> B -> A.
-Proof. exact: const. Qed.
+Proof.
+  exact: const.
+Qed.
 
 
 (* note: flip is more general *)
 Lemma contraposition :
   (A -> ~ B) -> (B -> ~ A).
-Proof. exact: flip. Qed.
+Proof.
+  exact: flip.
+Qed.
 
 
 Lemma p_imp_np_iff_np : (A -> ~A)  <->  ~A.
-Admitted.
+Proof.
+  split.
+  - move=> a_i_na a.
+    exact: (a_i_na a a).
+  - exact: const.
+Qed.
 
 
 (* We can generalize the previous lemma into *)
 Lemma p_p_q_iff_p_q : (A -> A -> B)  <->  (A -> B).
-Admitted.
+Proof.
+  split.
+  - move=> a_i_a_i_b a.
+    exact: (a_i_a_i_b a a).
+  - move=> a_i_b a.
+    exact a_i_b.
+Qed.
 
 
 Lemma p_is_not_equal_not_p :
   ~ (A <-> ~ A).
-Admitted.
+Proof.
+  case.
+  move=> a_na na_a.
+  apply: (a_na).
+  - apply: (na_a). move=> a. by apply: a_na.
+  - apply: (na_a). move=> a. by apply: a_na.
+Qed.
 
 
 Lemma not_not_lem :
   ~ ~ (A \/ ~ A).
-Admitted.
+Proof.
+  move=> H.
+  apply: (H).
+  right.
+  move=> a.
+  apply: H.
+    by left.
+Qed.
 
 
 Lemma constructiveDNE :
   ~ ~ ~ A  ->  ~ A.
-Admitted.
+Proof.
+  move=> H.
+  move=> a.
+  apply: H.
+  move=> H.
+    by apply: H.
+Qed.
 
 End IntLogic.
-
-
 
 
 (* Boolean logic (decidable fragment enjoys classical laws) *)
@@ -64,22 +96,50 @@ Section BooleanLogic.
 
 Lemma LEM_decidable a :
   a || ~~ a.
-Admitted.
+Proof.
+    by case: a.
+Qed.
 
 Lemma disj_implb a b :
   a || (a ==> b).
-Admitted.
+Proof.
+    by case: a.
+Qed.
 
 Lemma iff_is_if_and_only_if a b :
   (a ==> b) && (b ==> a) = (a == b).
-Admitted.
+Proof.
+  case: a.
+    - by case: b.
+    - by case: b.
+Qed.
+
 
 Lemma implb_trans : transitive implb.
-Admitted.
+Proof.
+  rewrite /transitive.
+  move=> a b c.
+  case: a.
+    by case: b.
+    by case: b.
+Qed.
+
 
 Lemma triple_compb (f : bool -> bool) :
   f \o f \o f =1 f.
-Admitted.
+Proof.
+  case=> /=.
+  - case et: (f true).
+      by rewrite ?et.
+  - case ef: (f false).
+      by rewrite ?ef.
+  - by rewrite ?ef.
+  - case ef: (f false).
+  - case et: (f true).
+      by [].
+  - by [].
+  - by rewrite ?ef.
+Qed.
 
 (* negb \o odd means "even" *)
 Lemma even_add :
@@ -117,6 +177,3 @@ Proof.
 Admitted.
 
 End eq_comp.
-
-
-
